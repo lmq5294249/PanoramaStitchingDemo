@@ -8,14 +8,23 @@
 
 /* Begin PBXBuildFile section */
 		3E9916BA2578B53800176893 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9916B92578B53800176893 /* AppDelegate.m */; };
-		3E9916BD2578B53800176893 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9916BC2578B53800176893 /* SceneDelegate.m */; };
-		3E9916C02578B53800176893 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9916BF2578B53800176893 /* ViewController.m */; };
+		3E9916C02578B53800176893 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3E9916BF2578B53800176893 /* ViewController.mm */; };
 		3E9916C32578B53800176893 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E9916C12578B53800176893 /* Main.storyboard */; };
 		3E9916C52578B53A00176893 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3E9916C42578B53A00176893 /* Assets.xcassets */; };
 		3E9916C82578B53A00176893 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3E9916C62578B53A00176893 /* LaunchScreen.storyboard */; };
 		3E9916CB2578B53A00176893 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9916CA2578B53A00176893 /* main.m */; };
 		3E9916D52578B53B00176893 /* PanoramaStitchingDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9916D42578B53B00176893 /* PanoramaStitchingDemoTests.m */; };
 		3E9916E02578B53B00176893 /* PanoramaStitchingDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3E9916DF2578B53B00176893 /* PanoramaStitchingDemoUITests.m */; };
+		3E9916FB2578B67300176893 /* VCAM_0046_S04_03.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 3E9916F72578B67300176893 /* VCAM_0046_S04_03.JPG */; };
+		3E9916FC2578B67300176893 /* VCAM_0046_S04_02.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 3E9916F82578B67300176893 /* VCAM_0046_S04_02.JPG */; };
+		3E9916FD2578B67300176893 /* VCAM_0046_S04_01.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 3E9916F92578B67300176893 /* VCAM_0046_S04_01.JPG */; };
+		3E9916FE2578B67300176893 /* VCAM_0046_S04_04.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 3E9916FA2578B67300176893 /* VCAM_0046_S04_04.JPG */; };
+		3E99170A2578C0C100176893 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9917092578C0C100176893 /* opencv2.framework */; };
+		3E9917132578C7D400176893 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9917122578C7D400176893 /* AVFoundation.framework */; };
+		3E9917152578C7DC00176893 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9917142578C7DC00176893 /* CoreVideo.framework */; };
+		3E9917172578C7E300176893 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9917162578C7E300176893 /* CoreMedia.framework */; };
+		3E9917182578C7EC00176893 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9917162578C7E300176893 /* CoreMedia.framework */; };
+		3E99171A2578C7F300176893 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9917192578C7F300176893 /* AssetsLibrary.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,10 +48,8 @@
 		3E9916B52578B53800176893 /* PanoramaStitchingDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PanoramaStitchingDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E9916B82578B53800176893 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3E9916B92578B53800176893 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		3E9916BB2578B53800176893 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
-		3E9916BC2578B53800176893 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
 		3E9916BE2578B53800176893 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		3E9916BF2578B53800176893 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		3E9916BF2578B53800176893 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
 		3E9916C22578B53800176893 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3E9916C42578B53A00176893 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3E9916C72578B53A00176893 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -54,6 +61,15 @@
 		3E9916DB2578B53B00176893 /* PanoramaStitchingDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PanoramaStitchingDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3E9916DF2578B53B00176893 /* PanoramaStitchingDemoUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PanoramaStitchingDemoUITests.m; sourceTree = "<group>"; };
 		3E9916E12578B53B00176893 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3E9916F72578B67300176893 /* VCAM_0046_S04_03.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = VCAM_0046_S04_03.JPG; sourceTree = "<group>"; };
+		3E9916F82578B67300176893 /* VCAM_0046_S04_02.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = VCAM_0046_S04_02.JPG; sourceTree = "<group>"; };
+		3E9916F92578B67300176893 /* VCAM_0046_S04_01.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = VCAM_0046_S04_01.JPG; sourceTree = "<group>"; };
+		3E9916FA2578B67300176893 /* VCAM_0046_S04_04.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = VCAM_0046_S04_04.JPG; sourceTree = "<group>"; };
+		3E9917092578C0C100176893 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
+		3E9917122578C7D400176893 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		3E9917142578C7DC00176893 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		3E9917162578C7E300176893 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		3E9917192578C7F300176893 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +77,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E9917172578C7E300176893 /* CoreMedia.framework in Frameworks */,
+				3E9917132578C7D400176893 /* AVFoundation.framework in Frameworks */,
+				3E99170A2578C0C100176893 /* opencv2.framework in Frameworks */,
+				3E99171A2578C7F300176893 /* AssetsLibrary.framework in Frameworks */,
+				3E9917152578C7DC00176893 /* CoreVideo.framework in Frameworks */,
+				3E9917182578C7EC00176893 /* CoreMedia.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +110,7 @@
 				3E9916D32578B53B00176893 /* PanoramaStitchingDemoTests */,
 				3E9916DE2578B53B00176893 /* PanoramaStitchingDemoUITests */,
 				3E9916B62578B53800176893 /* Products */,
+				3E9917112578C7D400176893 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -104,12 +127,12 @@
 		3E9916B72578B53800176893 /* PanoramaStitchingDemo */ = {
 			isa = PBXGroup;
 			children = (
+				3E9917082578C0C100176893 /* opencv3.4.1 */,
+				3E9916F62578B67300176893 /* VCAM_0046_S04 */,
 				3E9916B82578B53800176893 /* AppDelegate.h */,
 				3E9916B92578B53800176893 /* AppDelegate.m */,
-				3E9916BB2578B53800176893 /* SceneDelegate.h */,
-				3E9916BC2578B53800176893 /* SceneDelegate.m */,
 				3E9916BE2578B53800176893 /* ViewController.h */,
-				3E9916BF2578B53800176893 /* ViewController.m */,
+				3E9916BF2578B53800176893 /* ViewController.mm */,
 				3E9916C12578B53800176893 /* Main.storyboard */,
 				3E9916C42578B53A00176893 /* Assets.xcassets */,
 				3E9916C62578B53A00176893 /* LaunchScreen.storyboard */,
@@ -135,6 +158,36 @@
 				3E9916E12578B53B00176893 /* Info.plist */,
 			);
 			path = PanoramaStitchingDemoUITests;
+			sourceTree = "<group>";
+		};
+		3E9916F62578B67300176893 /* VCAM_0046_S04 */ = {
+			isa = PBXGroup;
+			children = (
+				3E9916F92578B67300176893 /* VCAM_0046_S04_01.JPG */,
+				3E9916F82578B67300176893 /* VCAM_0046_S04_02.JPG */,
+				3E9916F72578B67300176893 /* VCAM_0046_S04_03.JPG */,
+				3E9916FA2578B67300176893 /* VCAM_0046_S04_04.JPG */,
+			);
+			path = VCAM_0046_S04;
+			sourceTree = "<group>";
+		};
+		3E9917082578C0C100176893 /* opencv3.4.1 */ = {
+			isa = PBXGroup;
+			children = (
+				3E9917092578C0C100176893 /* opencv2.framework */,
+			);
+			path = opencv3.4.1;
+			sourceTree = "<group>";
+		};
+		3E9917112578C7D400176893 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3E9917192578C7F300176893 /* AssetsLibrary.framework */,
+				3E9917162578C7E300176893 /* CoreMedia.framework */,
+				3E9917142578C7DC00176893 /* CoreVideo.framework */,
+				3E9917122578C7D400176893 /* AVFoundation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -239,9 +292,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E9916FC2578B67300176893 /* VCAM_0046_S04_02.JPG in Resources */,
+				3E9916FD2578B67300176893 /* VCAM_0046_S04_01.JPG in Resources */,
 				3E9916C82578B53A00176893 /* LaunchScreen.storyboard in Resources */,
 				3E9916C52578B53A00176893 /* Assets.xcassets in Resources */,
+				3E9916FE2578B67300176893 /* VCAM_0046_S04_04.JPG in Resources */,
 				3E9916C32578B53800176893 /* Main.storyboard in Resources */,
+				3E9916FB2578B67300176893 /* VCAM_0046_S04_03.JPG in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,10 +323,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3E9916C02578B53800176893 /* ViewController.m in Sources */,
+				3E9916C02578B53800176893 /* ViewController.mm in Sources */,
 				3E9916BA2578B53800176893 /* AppDelegate.m in Sources */,
 				3E9916CB2578B53A00176893 /* main.m in Sources */,
-				3E9916BD2578B53800176893 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,7 +499,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V29DM8ABKF;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/PanoramaStitchingDemo/opencv3.4.1",
+				);
 				INFOPLIST_FILE = PanoramaStitchingDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -461,7 +522,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = V29DM8ABKF;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/PanoramaStitchingDemo/opencv3.4.1",
+				);
 				INFOPLIST_FILE = PanoramaStitchingDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
