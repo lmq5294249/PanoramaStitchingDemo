@@ -27,6 +27,7 @@ typedef NS_ENUM(NSUInteger, StitchImagesType) {
 
 @property (nonatomic,strong) UIImageView *showView;
 @property (nonatomic,strong) UIImageView *resultView;
+@property (nonatomic,strong) UIImageView *fisheyeView;
 
 @property (nonatomic,strong) NSMutableArray *imageArray;
 
@@ -98,6 +99,17 @@ typedef NS_ENUM(NSUInteger, StitchImagesType) {
     fisheyeBtn.layer.masksToBounds = YES;
     [fisheyeBtn addTarget:self action:@selector(fisheyeStitchType:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:fisheyeBtn];
+    
+    UIButton *sphericalBtn = [[UIButton alloc] initWithFrame:CGRectMake((self.view.frame.size.width - 200)/2, self.view.frame.size.height - 58, 200, 50)];
+    [sphericalBtn setTitle:@"平面图片球面化" forState:UIControlStateNormal];
+    [sphericalBtn setTitle:@"生成中..." forState:UIControlStateSelected];
+    sphericalBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+    sphericalBtn.titleLabel.textColor = [UIColor whiteColor];
+    [sphericalBtn setBackgroundColor:[UIColor redColor]];
+    sphericalBtn.layer.cornerRadius = 5;
+    sphericalBtn.layer.masksToBounds = YES;
+    [sphericalBtn addTarget:self action:@selector(transformSphericalImageType:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:sphericalBtn];
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -109,6 +121,12 @@ typedef NS_ENUM(NSUInteger, StitchImagesType) {
 //        [weakSelf stitchImage:weakSelf.imageArray];
 //    });
     
+    //[self transformPinholeImageToFisheyeImage:imageArray[3]];
+    //效果不理想，不够清晰
+    //[self transformPlaneImageToSphericalImage:imageArray[3]];
+   // 更换不同尺寸图片测试 -- 效果不好
+//    UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"VCAM_0042.JPG"]];
+//    [self transformPlaneImageToSphericalImage:image];
 }
 
 -(void)panoramaStitchType:(id)sender
@@ -179,14 +197,18 @@ typedef NS_ENUM(NSUInteger, StitchImagesType) {
          剪切运行时间>>>>>>>>>>cost time = 16845.719099 ms
          测试结果是：超级耗时,基于原图片不完全的操作。
          */
-        cv::Ptr<Stitcher> stitcher = Stitcher::create();//4.0
-        cv::Ptr<FisheyeWarper> fisheye_warper = makePtr<cv::FisheyeWarper>();
-        stitcher->setWarper(fisheye_warper);
-        status = stitcher->stitch(imgs, pano);
+        Stitcher stitcher = Stitcher::createDefault(false);
+        FisheyeWarper *fisheye_warper = new FisheyeWarper();
+        stitcher.setWarper(fisheye_warper);
+//        StereographicWarper* cw = new StereographicWarper();
+//        stitcher.setWarper(cw);
+        status = stitcher.stitch(imgs, pano);
     }
     else if (type == StitchImagesTypePanoramaNormal)
     {
         Stitcher stitcher = Stitcher::createDefault(false);
+//        SphericalWarper* cw = new SphericalWarper();
+//        stitcher.setWarper(cw);
         status = stitcher.stitch(imgs, pano);//拼接
     }
     else{
@@ -321,5 +343,198 @@ int getMaxContour(std::vector<vector<cv::Point>> contours){
   return index;
 }
 
+#pragma mark - 图片模型转换
+//MARK:将针孔相机模型图片转换成鱼眼相机模型图片
+-(void)transformSphericalImageType:(id)sender
+{
+    UIButton *btn = sender;
+    btn.selected  = !btn.selected;
+    if (btn.selected) {
+        if (_isUnderStitchingNow == YES) {
+            return;
+        }
+        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"VCAM_0042.JPG"]];
+        _fisheyeView = [[UIImageView alloc] initWithFrame:CGRectMake((self.view.frame.size.width - 300)/2, (self.view.frame.size.height - 300)/2, 300, 300)];
+        [self.view addSubview:_fisheyeView];
+        [_fisheyeView setImage:image];
+        __weak typeof(self) weakSelf = self;
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            weakSelf.isUnderStitchingNow = YES;
+            [weakSelf transformPlaneImageToSphericalImage:image];
+            weakSelf.isUnderStitchingNow = NO;
+        });
+    }
+    else{
+        _fisheyeView.hidden = YES;
+    }
+}
+
+
+-(void)transformPinholeImageToFisheyeImage:(UIImage *)image
+{
+    cv::Mat srcImg;
+    UIImageToMat(image, srcImg);
+    cvtColor(srcImg, srcImg, CV_RGBA2RGB);
+//    Mat dst = Mat::zeros(4000, 4000, CV_8UC3); //我要转化为512*512大小的
+//    resize(srcImg, srcImg, srcImg.size());
+    const int f = 500;
+    cv::Mat dstImg = cv::Mat(srcImg.cols, srcImg.cols, CV_8UC3, cv::Scalar(0,0,0));
+    //---------transform pinhole image to fisheye image---------------//
+        int ux = srcImg.cols / 2;
+        int uy = srcImg.rows / 2;
+
+        int dx, dy, xf, yf, x, y;
+        double rc, rf, theta, gama;
+        for (int i = 0; i < srcImg.rows; i++) {
+            for (int j = 0; j < srcImg.cols; j++) {
+                dy = i - uy;
+                dx = j - ux;
+                rc = sqrt(pow(dy, 2) + pow(dx, 2));
+                theta = atan2(rc, f);
+                gama = atan2(dy, dx);
+                rf = f * theta;
+                xf = rf * cos(gama);
+                yf = rf * sin(gama);
+                x = xf + ux;
+                y = yf + uy;
+                dstImg.at<cv::Vec3b>(y, x)[0] = srcImg.at<cv::Vec3b>(i, j)[0];
+                dstImg.at<cv::Vec3b>(y, x)[1] = srcImg.at<cv::Vec3b>(i, j)[1];
+                dstImg.at<cv::Vec3b>(y, x)[2] = srcImg.at<cv::Vec3b>(i, j)[2];
+            }
+        }
+        //----------------------------------------------------------------//
+    UIImage *resultImage = MatToUIImage(dstImg);
+    NSLog(@"resultImage 宽 = %f, 高 = %f",resultImage.size.width,resultImage.size.height);
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        UIImageView *fisheyeView = [[UIImageView alloc] initWithFrame:CGRectMake((self.view.frame.size.width - 300)/2, (self.view.frame.size.height - 300)/2, 300, 300)];
+        [weakSelf.view addSubview:fisheyeView];
+        [fisheyeView setImage:resultImage];
+        UIImageWriteToSavedPhotosAlbum(resultImage, self, nil, nil);
+        
+        
+    });
+}
+
+//-(void)transformPlaneImageToSphericalImage:(UIImage *)image
+//{
+//    cv::Mat srcImg;
+//    UIImageToMat(image, srcImg);
+//    cvtColor(srcImg, srcImg, CV_RGBA2RGB);
+//
+//    int rows = srcImg.rows;
+//    int cols = srcImg.cols;
+//    cv::Mat dstImg = cv::Mat(srcImg.cols, srcImg.cols, CV_8UC3, cv::Scalar(0,0,0));
+//    //---------transform pinhole image to fisheye image---------------//
+//    int center_x = srcImg.cols / 2;
+//    int center_y = srcImg.rows / 2;
+//    int r = int((sqrt(rows*rows+cols*cols)/2))+20;
+//
+//    int pz = r;
+//    int ox,oy,z,k,px,py;
+//        for (int i = 0; i < srcImg.rows; i++) {
+//            ox = i;
+//            i = i - center_x;
+//            for (int j = 0; j < srcImg.cols; j++) {
+//                oy = j;
+//                j = j - center_y;
+//                z = sqrt(r*r - i*i - j*j);
+//                k = (pz - 2*r)/(z - 2*r);
+//                px = int(k*i);
+//                py = int(k*j);
+//                px = px + center_x;
+//                py = py + center_y;
+//                dstImg.at<cv::Vec3b>(py, px)[0] = srcImg.at<cv::Vec3b>(i, j)[0];
+//                dstImg.at<cv::Vec3b>(py, px)[1] = srcImg.at<cv::Vec3b>(i, j)[1];
+//                dstImg.at<cv::Vec3b>(py, px)[2] = srcImg.at<cv::Vec3b>(i, j)[2];
+//            }
+//        }
+//        //----------------------------------------------------------------//
+//    UIImage *resultImage = MatToUIImage(dstImg);
+//    NSLog(@"resultImage 宽 = %f, 高 = %f",resultImage.size.width,resultImage.size.height);
+//    __weak typeof(self) weakSelf = self;
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//
+//        UIImageView *fisheyeView = [[UIImageView alloc] initWithFrame:CGRectMake((self.view.frame.size.width - 300)/2, (self.view.frame.size.height - 300)/2, 300, 300)];
+//        [weakSelf.view addSubview:fisheyeView];
+//        [fisheyeView setImage:resultImage];
+//        UIImageWriteToSavedPhotosAlbum(resultImage, self, nil, nil);
+//
+//
+//    });
+//}
+
+-(void)transformPlaneImageToSphericalImage:(UIImage *)image
+{
+    cv::Mat originImg;
+    UIImageToMat(image, originImg);
+    
+    Mat srcImg = Mat::zeros(6000, 6000, CV_8UC3); //我要转化为8000*8000大小的
+    resize(originImg, srcImg, srcImg.size());
+    
+    cvtColor(srcImg, srcImg, CV_RGBA2RGB);
+    
+    double r = srcImg.cols / 5;
+    int w = atan2(srcImg.cols / 2, r) * 2 * r;
+    int h = atan2(srcImg.rows / 2, r) * 2 * r;
+    
+    cv::Mat destImgMat = cv::Mat::zeros(cv::Size(w, h), CV_8UC3);
+    
+    for (int y = 0; y < destImgMat.rows; y++)
+        {
+            for (int x = 0; x < destImgMat.cols; x++)
+            {
+                cv::Point2f current_pos(x, y);
+                // double length = r / sqrt(abs(powf(cos((current_pos.x - w / 2) * CV_PI / (r * 180)), 2) - powf(cos((current_pos.y - h / 2) * CV_PI / (r * 180)), 2)));
+                double length = r * r / sqrt(r * r - (current_pos.x - w / 2) * (current_pos.x - w / 2) - (current_pos.y - h / 2) * (current_pos.y - h / 2));
+                float point_x = sin((current_pos.x - w / 2) / r) * length + srcImg.cols / 2;
+                float point_y = sin((current_pos.y - h / 2) / r) * length + srcImg.rows / 2;
+                cv::Point2f original_point(point_x, point_y);
+     
+                cv::Point2i top_left((int)(original_point.x), (int)(original_point.y)); //top left because of integer rounding
+     
+                //make sure the point is actually inside the original image
+                if (top_left.x < 0 || top_left.x > srcImg.cols - 2 || top_left.y < 0 || top_left.y > srcImg.rows - 2)
+                {
+                    continue;
+                }
+     
+                //bilinear interpolation
+                float dx = original_point.x - top_left.x;
+                float dy = original_point.y - top_left.y;
+     
+                float weight_tl = (1.0 - dx) * (1.0 - dy);
+                float weight_tr = (dx) * (1.0 - dy);
+                float weight_bl = (1.0 - dx) * (dy);
+                float weight_br = (dx) * (dy);
+                for (int k = 0; k < 3; k++)
+                {
+                    uchar value = weight_tl * srcImg.at<cv::Vec3b>(top_left)[k] +
+                                  weight_tr * srcImg.at<cv::Vec3b>(top_left.y, top_left.x + 1)[k] +
+                                  weight_bl * srcImg.at<cv::Vec3b>(top_left.y + 1, top_left.x)[k] +
+                                  weight_br * srcImg.at<cv::Vec3b>(top_left.y + 1, top_left.x + 1)[k];
+     
+                    destImgMat.at<cv::Vec3b>(y, x)[k] = value;
+                }
+            }
+        }
+    
+    UIImage *resultImage = MatToUIImage(destImgMat);
+    NSLog(@"resultImage 宽 = %f, 高 = %f",resultImage.size.width,resultImage.size.height);
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (!weakSelf.fisheyeView) {
+            weakSelf.fisheyeView = [[UIImageView alloc] initWithFrame:CGRectMake((self.view.frame.size.width - 300)/2, (self.view.frame.size.height - 300)/2, 300, 300)];
+            [weakSelf.view addSubview:weakSelf.fisheyeView];
+        }
+        
+        [weakSelf.fisheyeView setImage:resultImage];
+        UIImageWriteToSavedPhotosAlbum(resultImage, self, nil, nil);
+        
+        
+    });
+}
 
 @end
