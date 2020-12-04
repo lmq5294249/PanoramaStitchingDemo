@@ -189,6 +189,9 @@ typedef NS_ENUM(NSUInteger, StitchImagesType) {
         Stitcher stitcher = Stitcher::createDefault(false);
         status = stitcher.stitch(imgs, pano);//拼接
     }
+    else{
+        return;
+    }
     
     if (status != Stitcher::OK) {
         NSLog(@"拼接出错!!!!!!!!!!!!!!!!!!!!!");
