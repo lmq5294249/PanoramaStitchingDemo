@@ -187,7 +187,7 @@ typedef NS_ENUM(NSUInteger, StitchImagesType) {
     else if (type == StitchImagesTypePanoramaNormal)
     {
         Stitcher stitcher = Stitcher::createDefault(false);
-        Stitcher::Status status = stitcher.stitch(imgs, pano);//拼接
+        status = stitcher.stitch(imgs, pano);//拼接
     }
     
     if (status != Stitcher::OK) {
@@ -197,7 +197,7 @@ typedef NS_ENUM(NSUInteger, StitchImagesType) {
     //MARK:结束拼接时间
     double deltaTime = [[NSDate date] timeIntervalSinceDate:tmpStartData];
     NSLog(@"拼接运行时间>>>>>>>>>>cost time = %f ms", deltaTime*1000);
-    tmpStartData = [NSDate date];
+    //tmpStartData = [NSDate date];
     
     UIImage *targerImage = MatToUIImage(pano);
     
