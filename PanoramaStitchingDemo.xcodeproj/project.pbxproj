@@ -25,6 +25,7 @@
 		3E9917172578C7E300176893 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9917162578C7E300176893 /* CoreMedia.framework */; };
 		3E9917182578C7EC00176893 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9917162578C7E300176893 /* CoreMedia.framework */; };
 		3E99171A2578C7F300176893 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E9917192578C7F300176893 /* AssetsLibrary.framework */; };
+		3EFA551A257A30190043221D /* VCAM_0042.JPG in Resources */ = {isa = PBXBuildFile; fileRef = 3EFA5519257A30190043221D /* VCAM_0042.JPG */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +71,7 @@
 		3E9917142578C7DC00176893 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		3E9917162578C7E300176893 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		3E9917192578C7F300176893 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		3EFA5519257A30190043221D /* VCAM_0042.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = VCAM_0042.JPG; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +165,7 @@
 		3E9916F62578B67300176893 /* VCAM_0046_S04 */ = {
 			isa = PBXGroup;
 			children = (
+				3EFA5519257A30190043221D /* VCAM_0042.JPG */,
 				3E9916F92578B67300176893 /* VCAM_0046_S04_01.JPG */,
 				3E9916F82578B67300176893 /* VCAM_0046_S04_02.JPG */,
 				3E9916F72578B67300176893 /* VCAM_0046_S04_03.JPG */,
@@ -292,6 +295,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3EFA551A257A30190043221D /* VCAM_0042.JPG in Resources */,
 				3E9916FC2578B67300176893 /* VCAM_0046_S04_02.JPG in Resources */,
 				3E9916FD2578B67300176893 /* VCAM_0046_S04_01.JPG in Resources */,
 				3E9916C82578B53A00176893 /* LaunchScreen.storyboard in Resources */,
