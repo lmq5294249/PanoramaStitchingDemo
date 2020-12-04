@@ -18,12 +18,19 @@ int thresh = 100;
 int max_thresh = 255;
 RNG rng(12345);
 
+typedef NS_ENUM(NSUInteger, StitchImagesType) {
+    StitchImagesTypePanoramaNormal,
+    StitchImagesTypeFisheye,
+};
+
 @interface ViewController ()
 
 @property (nonatomic,strong) UIImageView *showView;
 @property (nonatomic,strong) UIImageView *resultView;
 
 @property (nonatomic,strong) NSMutableArray *imageArray;
+
+@property (nonatomic,assign) BOOL isUnderStitchingNow;
 
 @end
 
@@ -69,21 +76,86 @@ RNG rng(12345);
     [self.view addSubview:imageView_2];
     [self.view addSubview:imageView_3];
     [self.view addSubview:imageView_4];
+    
+    UIButton *stitchBtn = [[UIButton alloc] initWithFrame:CGRectMake(280, 15, 90, 40)];
+    [stitchBtn setTitle:@"全景拼接" forState:UIControlStateNormal];
+    [stitchBtn setTitle:@"拼接中..." forState:UIControlStateSelected];
+    stitchBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+    stitchBtn.titleLabel.textColor = [UIColor whiteColor];
+    [stitchBtn setBackgroundColor:[UIColor blackColor]];
+    stitchBtn.layer.cornerRadius = 5;
+    stitchBtn.layer.masksToBounds = YES;
+    [stitchBtn addTarget:self action:@selector(panoramaStitchType:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:stitchBtn];
+    
+    UIButton *fisheyeBtn = [[UIButton alloc] initWithFrame:CGRectMake(280, 75, 90, 40)];
+    [fisheyeBtn setTitle:@"鱼眼拼接" forState:UIControlStateNormal];
+    [fisheyeBtn setTitle:@"拼接中..." forState:UIControlStateSelected];
+    fisheyeBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14];
+    fisheyeBtn.titleLabel.textColor = [UIColor whiteColor];
+    [fisheyeBtn setBackgroundColor:[UIColor blueColor]];
+    fisheyeBtn.layer.cornerRadius = 5;
+    fisheyeBtn.layer.masksToBounds = YES;
+    [fisheyeBtn addTarget:self action:@selector(fisheyeStitchType:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:fisheyeBtn];
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     
     [super viewWillAppear:animated];
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [weakSelf stitchImage:weakSelf.imageArray];
-    });
+//    __weak typeof(self) weakSelf = self;
+//    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//        [weakSelf stitchImage:weakSelf.imageArray];
+//    });
     
 }
 
-//拼接代码
--(void)stitchImage:(NSArray*)images{
+-(void)panoramaStitchType:(id)sender
+{
+    UIButton *btn = sender;
+    btn.selected = !btn.selected;
+    if (btn.selected) {
+        if (_isUnderStitchingNow == YES) {
+            return;
+        }
+        
+        [_showView setImage:nil];
+        [_resultView setImage:nil];
+        __weak typeof(self) weakSelf = self;
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            weakSelf.isUnderStitchingNow = YES;
+            [weakSelf stitchImage:weakSelf.imageArray witchStitchType:StitchImagesTypePanoramaNormal];
+            weakSelf.isUnderStitchingNow = NO;
+        });
+    }
+    
+}
+
+-(void)fisheyeStitchType:(id)sender
+{
+    UIButton *btn = sender;
+    btn.selected = !btn.selected;
+    if (btn.selected) {
+        if (_isUnderStitchingNow == YES) {
+            return;
+        }
+        
+        [_showView setImage:nil];
+        [_resultView setImage:nil];
+        __weak typeof(self) weakSelf = self;
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            weakSelf.isUnderStitchingNow = YES;
+            [weakSelf stitchImage:weakSelf.imageArray witchStitchType:StitchImagesTypeFisheye];
+            weakSelf.isUnderStitchingNow = NO;
+        });
+    }
+    
+}
+
+#pragma mark - 全景图片拼接
+//MARK:占用内存过高问题!!!!最后测试时由于showView 和 resuketView显示图片导致，图片在内存中占用超过150M内存，释放view后正常。
+-(void)stitchImage:(NSArray*)images witchStitchType:(StitchImagesType)type{
     
     //MARK:开始拼接时间
     NSDate* tmpStartData = [NSDate date];
@@ -98,10 +170,25 @@ RNG rng(12345);
     }
     
     Mat pano;
+    Stitcher::Status status;
     
-    Stitcher stitcher = Stitcher::createDefault(false);
-    
-    Stitcher::Status status = stitcher.stitch(imgs, pano);//拼接
+    if (type == StitchImagesTypeFisheye) {
+        /*
+         //MARK:鱼眼效果测试
+         拼接运行时间>>>>>>>>>>cost time = 26984.598041 ms
+         剪切运行时间>>>>>>>>>>cost time = 16845.719099 ms
+         测试结果是：超级耗时,基于原图片不完全的操作。
+         */
+        cv::Ptr<Stitcher> stitcher = Stitcher::create();//4.0
+        cv::Ptr<FisheyeWarper> fisheye_warper = makePtr<cv::FisheyeWarper>();
+        stitcher->setWarper(fisheye_warper);
+        status = stitcher->stitch(imgs, pano);
+    }
+    else if (type == StitchImagesTypePanoramaNormal)
+    {
+        Stitcher stitcher = Stitcher::createDefault(false);
+        Stitcher::Status status = stitcher.stitch(imgs, pano);//拼接
+    }
     
     if (status != Stitcher::OK) {
         NSLog(@"拼接出错!!!!!!!!!!!!!!!!!!!!!");
@@ -117,6 +204,7 @@ RNG rng(12345);
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         [weakSelf.showView setImage:targerImage];
+        UIImageWriteToSavedPhotosAlbum(targerImage, self, nil, nil);
     });
     
     //在全景图四周各添加10像素宽的黑色边框，以确保能够找到全景图的完整轮廓：
@@ -203,6 +291,17 @@ RNG rng(12345);
         UIImageWriteToSavedPhotosAlbum(resultImage, self, nil, nil);
     });
     
+    //资源释放解决内存过度占用的问题:
+    pano.release();
+    stitched.release();
+    gray.release();
+    tresh.release();
+    mask.release();
+    minRect.release();
+    sub.release();
+    minRectClone.release();
+    outputMat.release();
+
 }
 
 //循环最大的轮廓边框
