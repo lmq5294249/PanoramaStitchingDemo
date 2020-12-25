@@ -1,4 +1,4 @@
-# PanoramaStitchingDemo
+# PanoramaStitchingDemo 图片拼接
 使用Opencv拼接四张图片测试结果以及运行时间
 
 ##需要自己添加Opencv3.0 库
